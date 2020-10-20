@@ -1,0 +1,38 @@
+From: Felipe Sateler <fsateler@debian.org>
+Date: Thu, 12 Oct 2017 21:19:55 -0300
+Subject: Remove autodetection of raspberry cpus
+
+In debian we don't actually target raspberries, and guessing based on the build machine
+is wrong too
+
+Bug-Debian: https://bugs.debian.org/878347
+---
+ CMakeLists.txt | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+Index: supercollider/CMakeLists.txt
+===================================================================
+--- supercollider.orig/CMakeLists.txt
++++ supercollider/CMakeLists.txt
+@@ -357,21 +357,6 @@ elseif(MINGW)
+ 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mstackrealign")
+ endif()
+ 
+-# support for building on Raspberry Pi 1/2/3 and BBB
+-if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
+-  foreach(flag CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
+-    set(${flag} "${${flag}} -mfloat-abi=hard")
+-    set(${flag} "${${flag}} -mfpu=neon")
+-  endforeach()
+-elseif(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "armv6l")
+-  foreach(flag CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
+-    set(${flag} "${${flag}} -march=armv6")
+-    set(${flag} "${${flag}} -mtune=arm1176jzf-s")
+-    set(${flag} "${${flag}} -mfloat-abi=hard")
+-    set(${flag} "${${flag}} -mfpu=vfp")
+-  endforeach()
+-endif()
+-
+ if (NO_GPL3)
+ 	add_definitions(-DNO_GPL3)
+ endif()
